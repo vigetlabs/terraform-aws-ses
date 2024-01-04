@@ -23,9 +23,9 @@ resource "aws_sesv2_configuration_set" "this" {
   }
 
   dynamic "delivery_options" {
-    for_each = !var.create_sending_pool && var.ses_sending_pool_name != "" ? ["_enable"] : []
+    for_each = !var.create_sending_pool && var.sending_pool_name != "" ? ["_enable"] : []
     content {
-      sending_pool_name = var.ses_sending_pool_name
+      sending_pool_name = var.sending_pool_name
     }
   }
 }
@@ -33,7 +33,7 @@ resource "aws_sesv2_configuration_set" "this" {
 resource "aws_sesv2_dedicated_ip_pool" "this" {
   count = module.this.enabled && var.create_sending_pool ? 1 : 0
 
-  pool_name = var.ses_sending_pool_name != "" ? var.ses_sending_pool_name : module.this.id
+  pool_name = var.sending_pool_name != "" ? var.sending_pool_name : module.this.id
   tags      = module.this.tags
 }
 
@@ -44,7 +44,7 @@ resource "aws_iam_group" "ses_users" {
   count = module.this.enabled ? 1 : 0
 
   name = module.this.id
-  path = var.ses_group_path
+  path = var.group_path
 }
 
 ## IAM Group Policies for SES Domain Identity
@@ -84,7 +84,7 @@ resource "aws_iam_policy" "ses_sending_policy" {
   count = module.this.enabled ? 1 : 0
 
   name = module.this.id
-  path = var.ses_group_path
+  path = var.group_path
 
   policy = data.aws_iam_policy_document.ses_group_sending_policy.json
 
