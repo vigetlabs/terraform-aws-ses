@@ -5,7 +5,10 @@ variable "domain" {
 
 variable "sending_pool_name" {
   type        = string
-  description = "The name of the SES sending pool to associate the domain with."
+  description = <<EOT
+    Override the default sending pool name. If not provided, the sending pool name will use the context module id.
+    Note: If you are using an existing sending pool, create_sending_pool must be set to false.
+  EOT
   default     = ""
 }
 
