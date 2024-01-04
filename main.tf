@@ -48,6 +48,10 @@ resource "aws_iam_group" "ses_users" {
 }
 
 ## IAM Group Policies for SES Domain Identity
+locals {
+  allowed_sending_addresses = var.allowed_sending_addresses != [] ? var.allowed_sending_addresses : ["*@${var.domain}"]
+}
+
 data "aws_iam_policy_document" "ses_group_sending_policy" {
   statement {
     effect = "Allow"
@@ -65,17 +69,7 @@ data "aws_iam_policy_document" "ses_group_sending_policy" {
     condition {
       test     = "StringLike"
       variable = "ses:FromAddress"
-      values = [
-        "*@${var.domain}"
-      ]
-    }
-
-    condition {
-      test     = "StringLike"
-      variable = "ses:FeedbackAddress"
-      values = [
-        "*@${var.domain}"
-      ]
+      values   = local.allowed_sending_addresses
     }
   }
 }

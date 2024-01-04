@@ -23,3 +23,12 @@ variable "group_path" {
   description = "The IAM Path of the group and policy to create"
   default     = "/"
 }
+
+variable "allowed_sending_addresses" {
+  type        = list(string)
+  description = <<EOT
+    A list of email addresses that are allowed to send email from the domain.
+    If this list is empty, the domain will be configured to allow any email address to send email from the domain.
+  EOT
+  default     = []
+}
