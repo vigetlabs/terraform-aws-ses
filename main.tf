@@ -33,8 +33,9 @@ resource "aws_sesv2_configuration_set" "this" {
 resource "aws_sesv2_dedicated_ip_pool" "this" {
   count = module.this.enabled && var.create_sending_pool ? 1 : 0
 
-  pool_name = var.sending_pool_name != "" ? var.sending_pool_name : module.this.id
-  tags      = module.this.tags
+  pool_name    = var.sending_pool_name != "" ? var.sending_pool_name : module.this.id
+  scaling_mode = var.sending_pool_scaling_mode
+  tags         = module.this.tags
 }
 
 #=====================================

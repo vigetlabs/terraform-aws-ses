@@ -18,6 +18,12 @@ variable "create_sending_pool" {
   default     = false
 }
 
+variable "sending_pool_scaling_mode" {
+  type        = string
+  description = "(Optional) IP pool scaling mode. Valid values: STANDARD, MANAGED."
+  default     = "MANAGED"
+}
+
 variable "group_path" {
   type        = string
   description = "The IAM Path of the group and policy to create"
