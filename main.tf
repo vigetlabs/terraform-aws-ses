@@ -50,7 +50,7 @@ resource "aws_iam_group" "ses_users" {
 
 ## IAM Group Policies for SES Domain Identity
 locals {
-  allowed_sending_addresses = var.allowed_sending_addresses != [] ? var.allowed_sending_addresses : ["*@${var.domain}"]
+  allowed_sending_addresses = length(var.allowed_sending_addresses) != 0 ? var.allowed_sending_addresses : ["*@${var.domain}"]
 }
 
 data "aws_iam_policy_document" "ses_group_sending_policy" {
