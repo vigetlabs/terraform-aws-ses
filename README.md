@@ -1,4 +1,4 @@
-# viget.aws-canary-heartbeat
+# viget.terraform-aws-ses
 
 Terraform module to set up an [AWS SES sending domain](https://docs.aws.amazon.com/ses/latest/dg/Welcome.html).
 

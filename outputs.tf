@@ -21,14 +21,22 @@ output "iam_sending_group_name" {
 #=====================================
 output "dkim_records" {
   description = "The DNS records required for Amazon SES validation and DKIM setup."
-  value = try(flatten([
-    for attribute in aws_sesv2_email_identity.this[0].dkim_signing_attributes : [
-      for token in attribute.tokens : {
-        name    = "${token}._domainkey.${var.domain}"
-        type    = "CNAME"
-        ttl     = "600"
-        records = ["${token}.dkim.amazonses.com"]
-      }
-    ]
-  ]), [])
+  value = tomap({
+    for record in flatten([
+      for attribute in aws_sesv2_email_identity.this[0].dkim_signing_attributes : [
+        for token in attribute.tokens : {
+          token   = token
+          name    = "${token}._domainkey.${var.domain}"
+          type    = "CNAME"
+          ttl     = "600"
+          records = ["${token}.dkim.amazonses.com"]
+        }
+      ]
+    ]) : record.token => {
+      name    = record.name
+      type    = record.type
+      ttl     = record.ttl
+      records = record.records
+    }
+  })
 }
